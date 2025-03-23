@@ -35,3 +35,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Don't ignore Prisma
+!prisma/
+!prisma/schema.prisma
