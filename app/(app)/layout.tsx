@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useClerk, useUser } from "@clerk/nextjs";
@@ -19,16 +19,21 @@ const sidebarItems = [
   { href: "/video-upload", icon: UploadIcon, label: "Video Upload" },
 ];
 
-export default function AppLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useClerk();
   const { user } = useUser();
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch("/api/keep-alive").catch((err) => console.error("Keep-alive failed", err));
+    }, 5000); // Runs every 4 minutes
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogoClick = () => {
     router.push("/");
