@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"; // Prevents static optimization
+
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
@@ -9,5 +11,7 @@ export async function GET() {
     return NextResponse.json({ message: "Database is alive" });
   } catch (error) {
     return NextResponse.json({ error: "Failed to keep DB alive" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
